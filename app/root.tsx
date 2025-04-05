@@ -6,9 +6,33 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
+import Header from './components/Header';
+import Footer from './components/Footer';
+import { AuthProvider } from './contexts/AuthContext';
 import type { Route } from "./+types/root";
 import "./app.css";
+
+// Definição do tema global
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#4b6043', // Verde escuro rústico
+    },
+    secondary: {
+      main: '#8b4513', // Marrom caipira
+    },
+    background: {
+      default: '#f5f5f5',
+      paper: '#fff',
+    },
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -19,21 +43,25 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
   },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Tião Carreiro e Pardinho - Top 5 Músicas</title>
         <Meta />
         <Links />
       </head>
       <body>
-        {children}
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -42,19 +70,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <Header />
+      <Outlet />
+      <Footer />
+    </AuthProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  let details = "Ocorreu um erro inesperado.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
+    message = error.status === 404 ? "404" : "Erro";
     details =
       error.status === 404
-        ? "The requested page could not be found."
+        ? "A página solicitada não foi encontrada."
         : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
