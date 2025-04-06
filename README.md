@@ -1,87 +1,120 @@
-# Welcome to React Router!
+# Frontend React Router
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Este é um projeto frontend construído com React, utilizando React Router para navegação e gerenciamento de rotas.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 🛠 Tecnologias Utilizadas
 
-## Features
+- React 19.x
+- React Router 7.x
+- Material UI 7.x
+- TypeScript
+- Node.js 20.x
+- Docker
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## 📋 Pré-requisitos
 
-## Getting Started
+Para rodar localmente:
+- Node.js 20.x ou superior
+- npm ou yarn
 
-### Installation
+Para rodar com Docker:
+- Docker
+- Docker Compose
 
-Install the dependencies:
+## 🚀 Como Executar
 
+### Rodando Localmente
+
+1. Clone o repositório:
+```bash
+git clone 
+cd 
+```
+
+2. Instale as dependências:
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
-
+3. Execute em modo de desenvolvimento:
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
+4. Para build de produção:
 ```bash
 npm run build
+npm start
 ```
 
-## Deployment
+A aplicação estará disponível em `http://localhost:8080`
 
-### Docker Deployment
+### Rodando com Docker
 
-To build and run using Docker:
-
+1. Clone o repositório:
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+git clone 
+cd 
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+2. Construa e inicie os containers:
+```bash
+docker-compose up --build
 ```
 
-## Styling
+Ou em modo detached (background):
+```bash
+docker-compose up --build -d
+```
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+A aplicação estará disponível em `http://localhost:8080`
 
----
+### Comandos Docker Úteis
 
-Built with ❤️ using React Router.
+- Parar os containers:
+```bash
+docker-compose down
+```
+
+- Visualizar logs:
+```bash
+docker-compose logs -f frontend
+```
+
+- Reiniciar os containers:
+```bash
+docker-compose restart
+```
+
+## 🔧 Variáveis de Ambiente
+
+- `PORT`: Porta onde a aplicação será executada (default: 8080)
+- `NODE_ENV`: Ambiente de execução (development/production)
+
+## 📁 Estrutura do Projeto
+
+```
+frontend/
+├── app/              # Código fonte da aplicação
+├── public/           # Arquivos públicos
+├── tests/            # Testes
+├── Dockerfile        # Configuração Docker
+├── docker-compose.yml # Configuração Docker Compose
+├── package.json      # Dependências e scripts
+└── tsconfig.json     # Configuração TypeScript
+```
+
+## 🧪 Testes
+
+Para executar os testes:
+```bash
+# Executar todos os testes
+npm test
+```
+
+## 📚 Documentação Adicional
+
+- [React Router](https://reactrouter.com/)
+- [Material UI](https://mui.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+

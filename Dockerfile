@@ -1,22 +1,37 @@
-FROM node:20-alpine AS development-dependencies-env
-COPY . /app
-WORKDIR /app
-RUN npm ci
+# Build stage
+FROM node:20-alpine as build
 
-FROM node:20-alpine AS production-dependencies-env
-COPY ./package.json package-lock.json /app/
 WORKDIR /app
-RUN npm ci --omit=dev
 
-FROM node:20-alpine AS build-env
-COPY . /app/
-COPY --from=development-dependencies-env /app/node_modules /app/node_modules
-WORKDIR /app
+# Copiar arquivos de dependências
+COPY package*.json ./
+
+# Instalar dependências com flag para resolver conflitos
+RUN npm install --legacy-peer-deps
+
+# Copiar código fonte
+COPY . .
+
+# Buildar a aplicação
 RUN npm run build
 
+# Production stage
 FROM node:20-alpine
-COPY ./package.json package-lock.json /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
+
 WORKDIR /app
-CMD ["npm", "run", "start"]
+
+# Copiar dependências de produção
+COPY package*.json ./
+RUN npm install --production --legacy-peer-deps
+
+# Copiar build da aplicação
+COPY --from=build /app/build ./build
+
+# Expor porta 8080
+EXPOSE 8080
+
+# Variável de ambiente para a porta
+ENV PORT=8080
+
+# Iniciar a aplicação
+CMD ["npm", "start"]

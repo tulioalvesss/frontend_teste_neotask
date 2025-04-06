@@ -116,7 +116,7 @@ export default function LoginPage() {
           component="h1" 
           gutterBottom 
           align="center" 
-          color="white"
+          color="black"
           sx={{ 
             fontWeight: 'bold',
             textShadow: '1px 1px 3px rgba(0,0,0,0.3)',
@@ -129,7 +129,7 @@ export default function LoginPage() {
           variant="body1" 
           sx={{ mb: 4 }} 
           align="center" 
-          color="white"
+          color="black"
         >
           Entre com suas credenciais ou crie uma conta
         </Typography>
