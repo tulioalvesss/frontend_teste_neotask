@@ -47,7 +47,18 @@ const Header: React.FC = () => {
   };
 
   const menuItems = [
-    <MenuItem key="home" component={Link} to="/" onClick={handleMenuClose}>
+    <MenuItem 
+      key="home" 
+      component={Link} 
+      to="/" 
+      onClick={handleMenuClose}
+      sx={{
+        transition: 'background-color 0.3s ease',
+        '&:hover': {
+          backgroundColor: 'rgba(255, 255, 255, 0.1)'
+        }
+      }}
+    >
       Início
     </MenuItem>,
     isUserAdmin && (
@@ -56,16 +67,46 @@ const Header: React.FC = () => {
         component={Link} 
         to="/admin" 
         onClick={handleMenuClose}
-        sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1,
+          transition: 'background-color 0.3s ease',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+          }
+        }}
       >
         <AdminPanelSettingsIcon fontSize="small" />
         Admin
       </MenuItem>
     ),
     isLoggedIn ? (
-      <MenuItem key="logout" onClick={handleLogout}>Sair</MenuItem>
+      <MenuItem 
+        key="logout" 
+        onClick={handleLogout}
+        sx={{
+          transition: 'background-color 0.3s ease',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+          }
+        }}
+      >
+        Sair
+      </MenuItem>
     ) : (
-      <MenuItem key="login" onClick={redirectToLogin}>Logar</MenuItem>
+      <MenuItem 
+        key="login" 
+        onClick={redirectToLogin}
+        sx={{
+          transition: 'background-color 0.3s ease',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+          }
+        }}
+      >
+        Logar
+      </MenuItem>
     )
   ].filter(Boolean);
 
@@ -86,28 +127,83 @@ const Header: React.FC = () => {
                 fontSize: { xs: '1.2rem', md: '1.4rem' }
               }}
             >
-              MODA DE VIOLA
+              <Link 
+                to="/" 
+                style={{
+                  textDecoration: 'none',
+                  color: 'inherit'
+                }}
+                className="header-logo-link"
+              >
+                MODA DE VIOLA
+              </Link>
             </Typography>
           </Box>
           
           {!isMobile ? (
             <Box sx={{ display: 'flex', ml: 'auto' }}>
-              <Button color="inherit" component={Link} to="/" sx={{ mx: 1 }}>Início</Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/" 
+                sx={{ 
+                  mx: 1,
+                  transition: 'opacity 0.3s ease',
+                  '&:hover': {
+                    opacity: 0.8
+                  }
+                }}
+              >
+                Início
+              </Button>
               {isUserAdmin && (
                 <Button 
                   color="inherit" 
                   component={Link} 
                   to="/admin" 
-                  sx={{ mx: 1, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                  sx={{ 
+                    mx: 1, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 0.5,
+                    transition: 'opacity 0.3s ease',
+                    '&:hover': {
+                      opacity: 0.8
+                    }
+                  }}
                 >
                   <AdminPanelSettingsIcon fontSize="small" />
                   Admin
                 </Button>
               )}
               {isLoggedIn ? (
-                <Button color="inherit" sx={{ mx: 1 }} onClick={handleLogout}>Sair</Button>
+                <Button 
+                  color="inherit" 
+                  sx={{ 
+                    mx: 1,
+                    transition: 'opacity 0.3s ease',
+                    '&:hover': {
+                      opacity: 0.8
+                    }
+                  }} 
+                  onClick={handleLogout}
+                >
+                  Sair
+                </Button>
               ) : (
-                <Button color="inherit" sx={{ mx: 1 }} onClick={redirectToLogin}>Logar</Button>
+                <Button 
+                  color="inherit" 
+                  sx={{ 
+                    mx: 1,
+                    transition: 'opacity 0.3s ease',
+                    '&:hover': {
+                      opacity: 0.8
+                    }
+                  }} 
+                  onClick={redirectToLogin}
+                >
+                  Logar
+                </Button>
               )}
             </Box>
           ) : (
@@ -116,7 +212,13 @@ const Header: React.FC = () => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleMenuOpen}
-                sx={{ ml: 'auto' }}
+                sx={{ 
+                  ml: 'auto',
+                  transition: 'opacity 0.3s ease',
+                  '&:hover': {
+                    opacity: 0.8
+                  }
+                }}
               >
                 <MenuIcon />
               </IconButton>

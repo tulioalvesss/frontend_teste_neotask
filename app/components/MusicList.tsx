@@ -140,7 +140,8 @@ const MusicList: React.FC<MusicListProps> = ({ musics, loading = false }) => {
       </Divider>
 
       {/* Músicas restantes com menor destaque */}
-      <Stack spacing={2}>
+      {currentRemainingMusics.length > 0 && (
+        <Stack spacing={2}>
         {currentRemainingMusics.map((music) => (
           <Card 
             key={music.id} 
@@ -201,6 +202,14 @@ const MusicList: React.FC<MusicListProps> = ({ musics, loading = false }) => {
           </Card>
         ))}
       </Stack>
+      )}
+      {currentRemainingMusics.length === 0 && (
+        <Box sx={{ textAlign: 'center', p: 4 }}>
+          <Typography variant="body2" color="text.secondary">
+            Envie uma música para ser adicionada à lista
+          </Typography>
+        </Box>
+      )}
       
       {totalPages > 1 && (
         <Stack spacing={2} sx={{ mt: 4, display: 'flex', alignItems: 'center' }}>

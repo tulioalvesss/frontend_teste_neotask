@@ -47,15 +47,6 @@ const Footer: React.FC = () => {
               <Link href="#" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
                 Início
               </Link>
-              <Link href="#" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Sobre a Dupla
-              </Link>
-              <Link href="#" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Discografia
-              </Link>
-              <Link href="#" color="text.secondary" underline="hover" sx={{ mb: 1 }}>
-                Contato
-              </Link>
             </Box>
           </Grid>
           

@@ -21,7 +21,6 @@ export const getPendingSuggestions = async () => {
       
       if (possibleArrayProperties.length > 0) {
         const arrayProperty = possibleArrayProperties[0];
-        console.log(`Retornando array da propriedade: ${arrayProperty}`);
         suggestions = response.data[arrayProperty];
       }
     } else {

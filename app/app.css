@@ -13,3 +13,11 @@ body {
     color-scheme: dark;
   }
 }
+
+.header-logo-link {
+  transition: opacity 0.3s ease;
+}
+
+.header-logo-link:hover {
+  opacity: 0.8;
+}
