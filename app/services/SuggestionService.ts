@@ -11,7 +11,9 @@ export const createSuggestion = async (suggestion: { title: string; link: string
 
 export const getPendingSuggestions = async () => {
   try {
-    const response = await api.get('v1/suggestion-songs');
+    const response = await api.get('v1/admin/suggestion-songs');
+    let suggestions;
+
     if (typeof response.data === 'object' && !Array.isArray(response.data) && response.data !== null) {
       const possibleArrayProperties = Object.keys(response.data).filter(key => 
         Array.isArray(response.data[key])
@@ -20,11 +22,19 @@ export const getPendingSuggestions = async () => {
       if (possibleArrayProperties.length > 0) {
         const arrayProperty = possibleArrayProperties[0];
         console.log(`Retornando array da propriedade: ${arrayProperty}`);
-        return response.data[arrayProperty];
+        suggestions = response.data[arrayProperty];
       }
+    } else {
+      suggestions = response.data;
     }
-    
-    return response.data;
+
+    // Ordena as sugestões para que 'pending' apareça primeiro
+    return suggestions.sort((a: any, b: any) => {
+      if (a.status === 'pending' && b.status !== 'pending') return -1;
+      if (a.status !== 'pending' && b.status === 'pending') return 1;
+      return 0;
+    });
+
   } catch (error) {
     console.error('Erro ao buscar sugestões pendentes:', error);
     return [];
@@ -32,12 +42,12 @@ export const getPendingSuggestions = async () => {
 };
 
 export const approveSuggestion = async (id: number) => {
-  const response = await api.post(`v1/suggestion-songs/${id}/approve`);
+  const response = await api.post(`v1/admin/suggestion-songs/${id}/approve`);
   return response.data;
 };
 
 export const rejectSuggestion = async (id: number) => {
-  const response = await api.post(`v1/suggestion-songs/${id}/reject`);
+  const response = await api.post(`v1/admin/suggestion-songs/${id}/reject`);
   return response.data;
 };
 
