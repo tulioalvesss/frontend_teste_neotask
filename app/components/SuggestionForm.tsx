@@ -7,12 +7,13 @@ import {
   Typography, 
   Alert,
   Snackbar,
-  Stack
+  Stack,
+  CircularProgress
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import LoginIcon from '@mui/icons-material/Login';
 import { useAuth } from '../contexts/AuthContext';
+import { SanitizationService } from '../services/sanitizationService';
 
 interface SuggestionFormProps {
   onSubmit: (data: { title: string; link: string; }) => void;
@@ -25,6 +26,7 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
   const [titleError, setTitleError] = useState('');
   const [linkError, setLinkError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { isLoggedIn } = useAuth();
 
   const validateYoutubeUrl = (url: string): boolean => {
@@ -38,7 +40,7 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
     return youtubeRegex.some(regex => regex.test(url));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!isLoggedIn) {
@@ -70,10 +72,29 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
     }
 
     if (isValid) {
-      onSubmit({ title, link });
-      setTitle('');
-      setLink('');
-      setShowSuccess(true);
+      try {
+        setLoading(true);
+        // Sanitiza os inputs antes de enviar
+        const sanitizedTitle = SanitizationService.sanitizeInput(title);
+        const sanitizedLink = SanitizationService.sanitizeURL(link);
+
+        if (!sanitizedLink) {
+          setLinkError('URL inválida');
+          return;
+        }
+
+        await onSubmit({
+          title: sanitizedTitle,
+          link: sanitizedLink
+        });
+        setTitle('');
+        setLink('');
+        setShowSuccess(true);
+      } catch (error) {
+        console.error('Erro ao enviar sugestão:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -90,6 +111,7 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
               onChange={(e) => setTitle(e.target.value)}
               error={!!titleError}
               helperText={titleError}
+              disabled={loading}
               InputProps={{
                 startAdornment: (
                   <Box sx={{ mr: 1, color: 'text.secondary' }}>
@@ -108,6 +130,7 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
               error={!!linkError}
               helperText={linkError}
               placeholder="https://www.youtube.com/watch?v=..."
+              disabled={loading}
               InputProps={{
                 startAdornment: (
                   <Box sx={{ mr: 1, color: 'text.secondary' }}>
@@ -121,12 +144,15 @@ const SuggestionForm: React.FC<SuggestionFormProps> = ({ onSubmit, onLoginClick 
               type="submit" 
               variant="contained" 
               color="primary" 
-              endIcon={<SendIcon />}
+              endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
               size="large"
               fullWidth
+              disabled={loading}
               sx={{ py: 1.5 }}
             >
-              {isLoggedIn ? 'Enviar Sugestão' : 'Fazer Login para Enviar'}
+              {isLoggedIn 
+                ? loading ? 'Enviando...' : 'Enviar Sugestão' 
+                : 'Fazer Login para Enviar'}
             </Button>
           </Stack>
         </form>

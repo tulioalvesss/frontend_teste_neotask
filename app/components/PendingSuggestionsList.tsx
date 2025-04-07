@@ -238,8 +238,16 @@ export default function PendingSuggestionsList({ useModal = true }: PendingSugge
             <TableBody>
               {pendingSuggestions.map((suggestion) => {
                 const normalizedSuggestion = normalizeData(suggestion);
+                const isPending = normalizedSuggestion.status === 'pending';
                 return (
-                  <TableRow key={normalizedSuggestion.id} hover>
+                  <TableRow 
+                    key={normalizedSuggestion.id} 
+                    hover
+                    sx={{ 
+                      opacity: isPending ? 1 : 0.6,
+                      transition: 'opacity 0.3s ease'
+                    }}
+                  >
                      <TableCell>
                       <img src={normalizedSuggestion.image} alt={normalizedSuggestion.title} style={{ width: '50%', height: '50%', objectFit: 'cover' }} />
                     </TableCell>

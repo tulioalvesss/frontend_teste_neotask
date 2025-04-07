@@ -41,12 +41,16 @@ export const getPendingSuggestions = async () => {
 };
 
 export const approveSuggestion = async (id: number) => {
-  const response = await api.post(`v1/admin/suggestion-songs/${id}/approve`);
+  const response = await api.post(`v1/admin/suggestion-songs/approve`, {
+    id: id
+  });
   return response.data;
 };
 
 export const rejectSuggestion = async (id: number) => {
-  const response = await api.post(`v1/admin/suggestion-songs/${id}/reject`);
+  const response = await api.post(`v1/admin/suggestion-songs/reject`, {
+    id: id
+  });
   return response.data;
 };
 

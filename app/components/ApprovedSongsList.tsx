@@ -49,6 +49,8 @@ export default function ApprovedSongsList() {
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editLink, setEditLink] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { isLoggedIn, checkAuthStatus, isHydrated } = useAuth();
 
   useEffect(() => {
@@ -112,14 +114,16 @@ export default function ApprovedSongsList() {
   };
 
   const handleEditClose = () => {
+    if (savingEdit) return; // Evita fechar durante o salvamento
     setEditDialogOpen(false);
     setCurrentSong(null);
   };
 
   const handleSaveEdit = async () => {
-    if (!currentSong) return;
+    if (!currentSong || savingEdit) return;
     
     try {
+      setSavingEdit(true);
       // Usando o serviço para atualizar a música
       await updateSong(currentSong.id, { 
         title: editTitle, 
@@ -139,6 +143,8 @@ export default function ApprovedSongsList() {
     } catch (err) {
       setError('Erro ao atualizar música');
       console.error(err);
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -148,14 +154,16 @@ export default function ApprovedSongsList() {
   };
 
   const handleDeleteClose = () => {
+    if (deleting) return; // Evita fechar durante a exclusão
     setDeleteDialogOpen(false);
     setCurrentSong(null);
   };
 
   const handleConfirmDelete = async () => {
-    if (!currentSong) return;
+    if (!currentSong || deleting) return;
     
     try {
+      setDeleting(true);
       // Usando o serviço para excluir a música
       await deleteSong(currentSong.id);
       
@@ -168,6 +176,8 @@ export default function ApprovedSongsList() {
     } catch (err) {
       setError('Erro ao excluir música');
       console.error(err);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -299,6 +309,7 @@ export default function ApprovedSongsList() {
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               margin="normal"
+              disabled={savingEdit}
             />
             <TextField
               fullWidth
@@ -307,18 +318,20 @@ export default function ApprovedSongsList() {
               onChange={(e) => setEditLink(e.target.value)}
               margin="normal"
               placeholder="https://www.youtube.com/watch?v=..."
+              disabled={savingEdit}
             />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditClose} color="inherit">Cancelar</Button>
+          <Button onClick={handleEditClose} color="inherit" disabled={savingEdit}>Cancelar</Button>
           <Button 
             onClick={handleSaveEdit} 
             color="primary" 
             variant="contained"
-            startIcon={<SaveIcon />}
+            startIcon={savingEdit ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
+            disabled={savingEdit}
           >
-            Salvar Alterações
+            {savingEdit ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -341,9 +354,16 @@ export default function ApprovedSongsList() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteClose} color="inherit">Cancelar</Button>
-          <Button onClick={handleConfirmDelete} color="error" variant="contained" autoFocus>
-            Excluir
+          <Button onClick={handleDeleteClose} color="inherit" disabled={deleting}>Cancelar</Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            color="error" 
+            variant="contained" 
+            autoFocus
+            disabled={deleting}
+            startIcon={deleting ? <CircularProgress size={20} color="inherit" /> : null}
+          >
+            {deleting ? 'Excluindo...' : 'Excluir'}
           </Button>
         </DialogActions>
       </Dialog>

@@ -20,12 +20,22 @@ export const getAllSongs = async () => {
 };
 
 export const updateSong = async (id: number, song: any) => {
-    const response = await api.put(`v1/admin/songs/${id}`, song);
+    const response = await api.put(`v1/admin/songs`, {
+        id: id,
+        title: song.title,
+        viewCount: song.viewCount,
+        link: song.link,
+        image: song.image,
+    });
     return response.data;
 };
 
 export const deleteSong = async (id: number) => {
-    const response = await api.delete(`v1/admin/songs/${id}`);
+    const response = await api.delete(`v1/admin/songs`, {
+        data: {
+            id: id
+        }
+    });
     return response.data;
 };
 
