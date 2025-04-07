@@ -19,6 +19,13 @@ export const getAllSongs = async () => {
     return response.data;
 };
 
+export const createSong = async (link: string) => {
+    const response = await api.post('v1/admin/insert-song',{
+        link: link,
+    });
+    return response.data;
+};
+
 export const updateSong = async (id: number, song: any) => {
     const response = await api.put(`v1/admin/songs`, {
         id: id,

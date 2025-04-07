@@ -7,11 +7,13 @@ import {
   Tab, 
   Tabs, 
   CircularProgress, 
-  Alert
+  Alert,
+  Button
 } from '@mui/material';
 import { Navigate } from 'react-router';
 import PendingSuggestionsList from '~/components/PendingSuggestionsList';
 import ApprovedSongsList from '~/components/ApprovedSongsList';
+import AddSongModal from '~/components/AddSongModal';
 import { isAdmin } from '~/services/authService';
 import { useAuth } from '~/contexts/AuthContext';
 
@@ -45,6 +47,7 @@ export default function AdminPage() {
   const [tabValue, setTabValue] = useState(0);
   const [isAdminUser, setIsAdminUser] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const { isHydrated } = useAuth();
   
   useEffect(() => {
@@ -88,19 +91,25 @@ export default function AdminPage() {
             mb: 4
           }}
         >
-          <Typography 
-            variant="h4" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              textAlign: 'center',
-              py: 2,
-              color: 'primary.main',
-              fontWeight: 'bold'
-            }}
-          >
-            Painel do Administrador
-          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              sx={{ 
+                color: 'primary.main',
+                fontWeight: 'bold'
+              }}
+            >
+              Painel do Administrador
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={() => setModalOpen(true)}
+            >
+              Adicionar Música
+            </Button>
+          </Box>
           
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="admin tabs">
@@ -117,6 +126,15 @@ export default function AdminPage() {
           </TabPanel>
         </Paper>
       </Container>
+      
+      <AddSongModal 
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={() => {
+          // Aqui você pode adicionar lógica para atualizar a lista de músicas
+          setModalOpen(false);
+        }}
+      />
     </Box>
   );
 } 
